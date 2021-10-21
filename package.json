@@ -1,0 +1,16 @@
+{
+  "name": "nuist-auto-auth-server",
+  "version": "1.0.0",
+  "description": "校园网自动登录等功能",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "author": "MossTheFox",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.23.0",
+    "express": "^4.17.1"
+  }
+}
