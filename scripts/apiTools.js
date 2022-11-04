@@ -9,10 +9,23 @@ const axios = require('axios').default;
 async function checkNetworkStatus() {
     try {
         // 检查有无公网连接
-        var res = await axios.get('https://api.mxowl.com/tools/ua', {
-            timeout: 3000
-        });
-        var resIP = res.data?.ip;
+
+        // whatismyipaddress 的 API 已经不再可用
+        let getIPViaOwlAPI = async () => {
+            var res = await axios.get('https://api.mxowl.com/tools/ua', {
+                timeout: 3000
+            });
+            return res.data?.ip;
+        }
+        // let getIPViaWhatIsMyIpAddress = async () => {
+        //     var res = await axios.get('https://bot.whatismyipaddress.com/', {
+        //         timeout: 4000
+        //     });
+        //     return res.data;
+        // }
+        var resIP = await getIPViaOwlAPI();
+
+        // var resIP = await getIPViaWhatIsMyIpAddress();
         if (!resIP) {
             throw new Error('反正就出错了。');
         }
@@ -31,7 +44,7 @@ async function checkNetworkStatus() {
  * 获取内网 IP，如果是无网络状态等则抛出异常
  */
 async function getIP() {
-    let res = await axios.get("http://a.nuist.edu.cn/api/v1/ip", {
+    let res = await axios.get("http://10.255.255.34/api/v1/ip", {
         timeout: 3000
     });
     var resJSON = res.data;
@@ -51,7 +64,7 @@ async function getIP() {
  */
 async function loginRequest(username, password, channel) {
     var ip = await getIP();
-    res = await axios.post("http://a.nuist.edu.cn/api/v1/login", JSON.stringify({
+    res = await axios.post("http://10.255.255.34/api/v1/login", JSON.stringify({
         channel: String(channel),
         ifautologin: "0",
         pagesign: "secondauth",
@@ -60,10 +73,10 @@ async function loginRequest(username, password, channel) {
         usripadd: ip,
     }));
     if (res.data?.message === "ok") {
-        console.log("成了");
+        console.log(`[${new Date().toLocaleString()}] 成了`);
         return;
     }
-    throw new Error("不成。");
+    throw new Error(`[${new Date().toLocaleString()}] 不成。`);
 }
 /** 注销登录，因为完全不验证用户名和密码，所以可以不用给参数。字段保留有值就行
  * @param {String} username 校园网帐户
@@ -72,7 +85,7 @@ async function loginRequest(username, password, channel) {
  */
 async function logoutRequest(username = '1145141919', password = '810', channel = '0') {
     var ip = await getIP();
-    var res = await axios.post("http://a.nuist.edu.cn/api/v1/logout", JSON.stringify({
+    var res = await axios.post("http://10.255.255.34/api/v1/logout", JSON.stringify({
         channel: String(channel),
         ifautologin: "0",
         pagesign: "thirdauth",

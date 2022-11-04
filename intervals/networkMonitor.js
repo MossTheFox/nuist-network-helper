@@ -11,11 +11,11 @@ const intervalConfig = {
  * @param runEndAt 定时任务结束的小时数，默认 8
  * @returns {Function} 移除定时任务的函数
  */
-function runNetworkMonitor(config = {
+ function runNetworkMonitor(config = {
     username: '0',
     password: '0',
     channel: '3'
-}, runFrom = 7, runEndAt = 8, skipHoursWhenSucceed = 2) {
+}, runFrom = 7, runEndAt = 8, skipHoursWhenSucceed = 2, intervalSeconds = 30) {
     console.log('启动定时任务...');
     var monitor = setInterval(async () => {
         // 这个事件默认只在早晨 7 点到 8 点之间执行，且 2 小时内不重复执行
@@ -35,19 +35,19 @@ function runNetworkMonitor(config = {
                     }
                 } else {
                     // 无内外网连接，啥都不做。
-                    console.log('无法连接到认证服务器, 稍后将重试...');
+                    console.log(`[${new Date().toLocaleString()}] 无法连接到认证服务器, 稍后将重试...`);
                     return;
                 }
                 break;
             case 'string':
                 // 说明此时已经登录好了，也啥都不做
-                console.log('已完成认证');
+                console.log(`[${new Date().toLocaleString()}] 已完成认证`);
                 intervalConfig.lastAuthTime = Date.now();
                 break;
             default:
                 break;
         }
-    }, 1000 * 30);
+    }, 1000 * (intervalSeconds || 30));
 
     return () => {
         clearInterval(monitor);
