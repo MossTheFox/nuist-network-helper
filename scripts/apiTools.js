@@ -44,7 +44,7 @@ async function checkNetworkStatus() {
  * 获取内网 IP，如果是无网络状态等则抛出异常
  */
 async function getIP() {
-    let res = await axios.get("http://10.255.255.34/api/v1/ip", {
+    let res = await axios.get("http://a.nuist.edu.cn/api/v1/ip", {
         timeout: 3000
     });
     var resJSON = res.data;
@@ -64,7 +64,7 @@ async function getIP() {
  */
 async function loginRequest(username, password, channel) {
     var ip = await getIP();
-    res = await axios.post("http://10.255.255.34/api/v1/login", JSON.stringify({
+    res = await axios.post("http://a.nuist.edu.cn/api/v1/login", JSON.stringify({
         channel: String(channel),
         ifautologin: "0",
         pagesign: "secondauth",
@@ -85,7 +85,7 @@ async function loginRequest(username, password, channel) {
  */
 async function logoutRequest(username = '1145141919', password = '810', channel = '0') {
     var ip = await getIP();
-    var res = await axios.post("http://10.255.255.34/api/v1/logout", JSON.stringify({
+    var res = await axios.post("http://a.nuist.edu.cn/api/v1/logout", JSON.stringify({
         channel: String(channel),
         ifautologin: "0",
         pagesign: "thirdauth",
